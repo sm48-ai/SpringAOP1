@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+        <bean id="empBean" class="com.satish.beans.Employee">
+             <property name="eno" value="1"/>
+             <property name="ename" value="MADHU"/>
+             <property name="esal" value="40000"/>
+             <property name="eaddr" value="AGRA"/>
+             <property name="emobile" value="91-9368620368"/>
+             <property name="eemail" value="masa@satish.com"/>
+        </bean>
+        <bean id="empService" class="com.satish.service.EmployeeServiceImpl"/>
+        <bean id="empValidatorAdvice" class="com.satish.advice.validator.EmployeeValidatorAdvice"/>
+        <bean id="pointcut1" class="org.springframework.aop.support.NameMatchMethodPointcut">
+             <property name="mappedNames">
+                <array>
+                    <value>getEmployeeDetails</value>
+                <!--   <value>displayEmployeeDetails</value>  -->  
+                </array>
+             </property> 
+        </bean>
+        <bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+          <property name="pointcut" ref="pointcut1"/>
+          <property name="advice" ref="empValidatorAdvice"/>
+        </bean>
+        <bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+            <property name="target" ref="empService"/>
+            <property name="interceptorNames">
+                <list>
+                    <value>advisor</value>
+                    
+                </list>
+            
+            </property>
+             
+        </bean>
+ </beans>
